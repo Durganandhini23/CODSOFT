@@ -1,0 +1,98 @@
+import java.util.*;
+
+public class QuizQuestion {
+	 private String question;
+	    private List<String> options;
+	    private int correctOptionIndex;
+
+	    public QuizQuestion(String question, List<String> options, int correctOptionIndex) {
+	        this.question = question;
+	        this.options = options;
+	        this.correctOptionIndex = correctOptionIndex;
+	    }
+
+	    public String getQuestion() {
+	        return question;
+	    }
+
+	    public List<String> getOptions() {
+	        return options;
+	    }
+
+	    public boolean isCorrect(int selectedOptionIndex) {
+	        return selectedOptionIndex == correctOptionIndex;
+	    }
+
+}
+
+import java.util.List;
+
+public class Quiz {
+	private List<QuizQuestion> questions;
+    private int currentQuestionIndex;
+    private int score;
+
+    public Quiz(List<QuizQuestion> questions) {
+        this.questions = questions;
+        this.currentQuestionIndex = 0;
+        this.score = 0;
+    }
+
+    public void displayQuestion() {
+        QuizQuestion currentQuestion = questions.get(currentQuestionIndex);
+        System.out.println(currentQuestion.getQuestion());
+        List<String> options = currentQuestion.getOptions();
+        for (int i = 0; i < options.size(); i++) {
+            System.out.println((i + 1) + ". " + options.get(i));
+        }
+    }
+
+    public void submitAnswer(int selectedOptionIndex) {
+        QuizQuestion currentQuestion = questions.get(currentQuestionIndex);
+        if (currentQuestion.isCorrect(selectedOptionIndex)) {
+            System.out.println("Correct!");
+            score++;
+        } else {
+            System.out.println("Incorrect.");
+        }
+        currentQuestionIndex++;
+    }
+
+    public void displayResult() {
+        System.out.println("Quiz Complete!");
+        System.out.println("Your Score: " + score + "/" + questions.size());
+    }
+
+}
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 List<QuizQuestion> questions = new ArrayList<>();
+	        questions.add(new QuizQuestion("What is the capital of France?", Arrays.asList("London", "Paris", "Berlin", "Rome"), 1));
+	        questions.add(new QuizQuestion("Which planet is known as the Red Planet?", Arrays.asList("Mars", "Venus", "Jupiter", "Saturn"), 0));
+	        questions.add(new QuizQuestion("What is the chemical symbol for water?", Arrays.asList("H2O", "CO2", "NaCl", "O2"), 0));
+
+	        Quiz quiz = new Quiz(questions);
+	        Scanner scanner = new Scanner(System.in);
+
+	        for (int i = 0; i < questions.size(); i++) {
+	            System.out.println("Question " + (i + 1) + ":");
+	            quiz.displayQuestion();
+	            System.out.print("Enter your answer (1-" + questions.get(i).getOptions().size() + "): ");
+	            int selectedOptionIndex = scanner.nextInt() - 1;
+	            quiz.submitAnswer(selectedOptionIndex);
+	            System.out.println();
+	        }
+
+	        quiz.displayResult();
+
+	}
+
+}
